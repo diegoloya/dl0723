@@ -1,0 +1,47 @@
+{
+  "tools": [
+    {
+      "code": "CHNS",
+      "type": "Chainsaw",
+      "brand": "Stihl"
+    },
+    {
+      "code": "LADW",
+      "type": "Ladder",
+      "brand": "Werner"
+    },
+    {
+      "code": "JAKD",
+      "type": "Jackhammer",
+      "brand": "DeWalt"
+    },
+    {
+      "code": "JAKR",
+      "type": "Jackhammer",
+      "brand": "Ridgid"
+    }
+  ],
+  "toolTypes": [
+    {
+      "toolType": "ladder",
+      "dailyCharge": 1.99,
+      "weekdayCharge": true,
+      "weekendCharge": true,
+      "holidayCharge": false
+    },
+    {
+      "toolType": "chainsaw",
+      "dailyCharge": 1.49,
+      "weekdayCharge": true,
+      "weekendCharge": false,
+      "holidayCharge": true
+    },
+    {
+      "toolType": "jackhammer",
+      "dailyCharge": 2.99,
+      "weekdayCharge": true,
+      "weekendCharge": false,
+      "holidayCharge": false
+    }
+  ]
+}
