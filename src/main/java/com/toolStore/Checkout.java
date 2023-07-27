@@ -1,10 +1,10 @@
 package com.toolStore;
 
 import com.google.gson.Gson;
-import com.toolStore.model.RentalAgreementModel;
-import com.toolStore.model.ToolModel;
-import com.toolStore.model.ToolTypeModel;
-import com.toolStore.model.Tools;
+import com.toolStore.model.RentalAgreement;
+import com.toolStore.model.Tool;
+import com.toolStore.model.ToolType;
+import com.toolStore.model.ToolList;
 
 import java.io.Reader;
 import java.nio.file.Files;
@@ -14,17 +14,18 @@ import java.util.Scanner;
 
 public class Checkout {
 
-    private ArrayList<ToolModel> tools;
-    private ArrayList<ToolTypeModel> toolTypes;
-    private RentalAgreementModel rentalAgreementReport;
+    private ArrayList<Tool> tools;
+    private ArrayList<ToolType> toolTypes;
+    private RentalAgreement rentalAgreementReport;
 
+    //Constructor obtains data from InventoryInfo.json file. This allows for simple additions to inventory.
     public Checkout() {
         try {
             Gson gson = new Gson();
-            Reader reader = Files.newBufferedReader(Paths.get("src/main/util/toolJson.json"));
-            Tools tools = gson.fromJson(reader, Tools.class);
-            this.tools = tools.getTools();
-            this.toolTypes = tools.getToolTypes();
+            Reader reader = Files.newBufferedReader(Paths.get("src/main/util/InventoryInfo.json"));
+            ToolList toolList = gson.fromJson(reader, ToolList.class);
+            this.tools = toolList.getTools();
+            this.toolTypes = toolList.getToolTypes();
 
             reader.close();
 
@@ -33,6 +34,7 @@ public class Checkout {
         }
     }
 
+    //Requests user input and does simple validation on input. Further validation will be done in RentalAgreement.java
     public void userInteraction(Scanner scanner) throws Exception {
         String toolCode;
         int rentalDayCount;
@@ -71,18 +73,19 @@ public class Checkout {
         this.rentalAgreementReport = generateRentalAgreement(toolCode, rentalDayCount, discount, checkoutDate);
     }
 
-    public RentalAgreementModel generateRentalAgreement(String toolCode, int rentalDayCount, int discount, String checkoutDate) throws Exception {
-        ToolModel selectedToolInfo = findToolModel(toolCode);
-        ToolTypeModel selectedToolTypeInfo = getToolTypeInfo(selectedToolInfo.getType());
-        RentalAgreementModel rentalAgreement = new RentalAgreementModel(
+    //Generates and returns RentalAgreement instance with values
+    public RentalAgreement generateRentalAgreement(String toolCode, int rentalDayCount, int discount, String checkoutDate) throws Exception {
+        Tool selectedToolInfo = findToolModel(toolCode);
+        ToolType selectedToolTypeInfo = getToolTypeInfo(selectedToolInfo.getType());
+        RentalAgreement rentalAgreement = new RentalAgreement(
                 selectedToolInfo, selectedToolTypeInfo, rentalDayCount, checkoutDate, discount
         );
         return rentalAgreement;
     }
 
 
-    private ToolModel findToolModel(String toolCode) {
-        for (ToolModel tool : tools) {
+    private Tool findToolModel(String toolCode) {
+        for (Tool tool : tools) {
             if (tool.getCode().equalsIgnoreCase(toolCode)) {
                 return tool;
             }
@@ -90,8 +93,8 @@ public class Checkout {
         return null;
     }
 
-    private ToolTypeModel getToolTypeInfo(String selectedToolType) {
-        for (ToolTypeModel toolType : toolTypes) {
+    private ToolType getToolTypeInfo(String selectedToolType) {
+        for (ToolType toolType : toolTypes) {
             if (toolType.getToolType().equalsIgnoreCase(selectedToolType)) {
                 return toolType;
             }
@@ -100,7 +103,7 @@ public class Checkout {
     }
 
     private boolean isValidToolCode(String toolCode) {
-        for (ToolModel tool : tools) {
+        for (Tool tool : tools) {
             if (tool.getCode().equalsIgnoreCase(toolCode)) {
                 return true;
             }
@@ -108,7 +111,7 @@ public class Checkout {
         return false;
     }
 
-    public RentalAgreementModel getRentalAgreementReport() {
+    public RentalAgreement getRentalAgreementReport() {
         return rentalAgreementReport;
     }
 }

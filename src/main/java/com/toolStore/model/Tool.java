@@ -1,12 +1,12 @@
 package com.toolStore.model;
 
 
-public class ToolModel {
+public class Tool {
     private String code;
     private String type;
     private String brand;
 
-    public ToolModel() {
+    public Tool() {
     }
 
 

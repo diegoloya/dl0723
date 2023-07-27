@@ -1,6 +1,6 @@
 package com.toolStore;
 
-import com.toolStore.model.RentalAgreementModel;
+import com.toolStore.model.RentalAgreement;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +27,7 @@ public class CheckoutTest {
         int rentalDays = 3;
         int discount = 10;
         Checkout checkout = new Checkout();
-        RentalAgreementModel agreement = checkout.generateRentalAgreement(toolCode, rentalDays, discount, checkoutDate);
+        RentalAgreement agreement = checkout.generateRentalAgreement(toolCode, rentalDays, discount, checkoutDate);
 
         Assertions.assertEquals(toolCode, agreement.getToolCode());
         Assertions.assertEquals("Ladder", agreement.getToolType());
@@ -51,7 +51,7 @@ public class CheckoutTest {
         int rentalDays = 5;
         int discount = 25;
         Checkout checkout = new Checkout();
-        RentalAgreementModel agreement = checkout.generateRentalAgreement(toolCode, rentalDays, discount, checkoutDate);
+        RentalAgreement agreement = checkout.generateRentalAgreement(toolCode, rentalDays, discount, checkoutDate);
 
         Assertions.assertEquals(toolCode, agreement.getToolCode());
         Assertions.assertEquals("Chainsaw", agreement.getToolType());
@@ -75,7 +75,7 @@ public class CheckoutTest {
         int rentalDays = 6;
         int discount = 0;
         Checkout checkout = new Checkout();
-        RentalAgreementModel agreement = checkout.generateRentalAgreement(toolCode, rentalDays, discount, checkoutDate);
+        RentalAgreement agreement = checkout.generateRentalAgreement(toolCode, rentalDays, discount, checkoutDate);
 
         Assertions.assertEquals(toolCode, agreement.getToolCode());
         Assertions.assertEquals("Jackhammer", agreement.getToolType());
@@ -99,7 +99,7 @@ public class CheckoutTest {
         int rentalDays = 9;
         int discount = 0;
         Checkout checkout = new Checkout();
-        RentalAgreementModel agreement = checkout.generateRentalAgreement(toolCode, rentalDays, discount, checkoutDate);
+        RentalAgreement agreement = checkout.generateRentalAgreement(toolCode, rentalDays, discount, checkoutDate);
 
         Assertions.assertEquals(toolCode, agreement.getToolCode());
         Assertions.assertEquals("Jackhammer", agreement.getToolType());
@@ -123,7 +123,7 @@ public class CheckoutTest {
         int rentalDays = 4;
         int discount = 50;
         Checkout checkout = new Checkout();
-        RentalAgreementModel agreement = checkout.generateRentalAgreement(toolCode, rentalDays, discount, checkoutDate);
+        RentalAgreement agreement = checkout.generateRentalAgreement(toolCode, rentalDays, discount, checkoutDate);
 
         Assertions.assertEquals(toolCode, agreement.getToolCode());
         Assertions.assertEquals("Jackhammer", agreement.getToolType());

@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RentalAgreementModel {
+public class RentalAgreement {
     private final String toolCode;
     private final String toolType;
     private final String toolBrand;
@@ -23,7 +23,8 @@ public class RentalAgreementModel {
     private final BigDecimal discountAmount;
     private final BigDecimal finalCharge;
 
-    public RentalAgreementModel(ToolModel selectedToolInfo, ToolTypeModel selectedToolTypeInfo, int rentalDays, String checkoutDate, int discountPercent) throws Exception {
+    //Constructor will orchestrate rental agreement creation using given values from user and inventory
+    public RentalAgreement(Tool selectedToolInfo, ToolType selectedToolTypeInfo, int rentalDays, String checkoutDate, int discountPercent) throws Exception {
         setDiscountPercent(discountPercent);
         setRentalDays(rentalDays);
         setCheckoutDate(checkoutDate);
@@ -40,6 +41,7 @@ public class RentalAgreementModel {
     }
 
 
+    //simple calculations based on initial checkout date plus rental day count
     private String getDueDate(String checkoutDate, int rentalDayCount) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/uu");
         LocalDate localCheckoutDate = validateDate(checkoutDate);
@@ -47,20 +49,24 @@ public class RentalAgreementModel {
         return localCheckoutDate.plusDays(rentalDayCount).format(formatter);
     }
 
+    //multiplies charge days by daily charge
     private BigDecimal getPrediscountCharge(int chargeDays, BigDecimal dailyCharge) {
         return BigDecimal.valueOf(chargeDays).multiply(dailyCharge);
     }
 
+    //calculates discount by diving given percentage by 100 to get decimal value and multiplying that by the prediscount charge
     private BigDecimal getDiscountAmount(BigDecimal preDiscountCharge, int discount) {
         BigDecimal decimalDiscount = BigDecimal.valueOf(discount).divide(BigDecimal.valueOf(100), 1, RoundingMode.HALF_UP);
         return preDiscountCharge.multiply(decimalDiscount).setScale(2, RoundingMode.HALF_UP);
     }
 
+    //prediscount charge - discount
     private BigDecimal getFinalCharge(BigDecimal preDiscountCharge, BigDecimal discountAmount) {
         return preDiscountCharge.subtract(discountAmount);
     }
 
-    private int getChargeDays(String checkoutDate, int rentalDayCount, ToolTypeModel toolTypeInfo) {
+    //calculates charge days based on information given on InventoryInfo.json regarding weekday/weekend/holiday charges
+    private int getChargeDays(String checkoutDate, int rentalDayCount, ToolType toolTypeInfo) {
         int chargeDays = 0;
         LocalDate localCheckoutDate = validateDate(checkoutDate);
 
@@ -84,6 +90,7 @@ public class RentalAgreementModel {
         return chargeDays;
     }
 
+    //returns a list of holiday dates based on the criteria given for weekend 4th of july and labor day mondays
     private ArrayList<LocalDate> getHolidays(LocalDate checkoutDate, int rentalDayCount) {
 
         ArrayList<LocalDate> holidayList = new ArrayList<>();
@@ -97,6 +104,7 @@ public class RentalAgreementModel {
     }
 
 
+    //checks if 4th of july is on weekend and adds or subtracts one day
     private LocalDate getActualIndependenceDay(int year) {
         return switch (LocalDate.of(year, 7, 4).getDayOfWeek()) {
             case SATURDAY -> LocalDate.of(year, 7, 3);
@@ -105,6 +113,7 @@ public class RentalAgreementModel {
         };
     }
 
+    //calculates 1st monday of the month relative to day of the week of the 1st day of the month
     private LocalDate getActualLaborDay(int year) {
         return switch (LocalDate.of(year, 9, 1).getDayOfWeek()) {
             case MONDAY -> LocalDate.of(year, 9, 1);
@@ -119,6 +128,7 @@ public class RentalAgreementModel {
     }
 
 
+    //formats and prints user-friendly report
     public void printReport() {
         System.out.println("Tool code:............." + this.toolCode);
         System.out.println("Tool type:............." + this.toolType);
@@ -134,6 +144,7 @@ public class RentalAgreementModel {
         System.out.println("Final charge:..........$" + String.format("%,.2f", this.finalCharge));
     }
 
+    //validates user given date to accept different formats in effort to give user more flexibility on input
     private LocalDate validateDate(String date) {
         LocalDate localDate = null;
         List<DateTimeFormatter> formatterList = new ArrayList<>();
@@ -175,6 +186,8 @@ public class RentalAgreementModel {
         return rentalDays;
     }
 
+
+    //sets rental days and throws exception based on given criteria
     private void setRentalDays(int rentalDays) throws Exception {
         if (rentalDays <= 0) {
             throw new Exception("Rental days must be at least 1. Please try again.");
@@ -188,6 +201,7 @@ public class RentalAgreementModel {
         return localCheckoutDate.format(formatter);
     }
 
+    //sets checkout date and throws exception based on given criteria
     private void setCheckoutDate(String checkoutDate) throws Exception {
         if (validateDate(checkoutDate) == null) {
             throw new Exception("Date is invalid. Please use this format: mm/dd/yy");
@@ -215,6 +229,7 @@ public class RentalAgreementModel {
         return discountPercent;
     }
 
+    //sets discount and throws exception based on given criteria
     private void setDiscountPercent(int discountPercent) throws Exception {
         if (discountPercent < 0 || discountPercent > 100) {
             throw new Exception("Discount should be between 0 and 100. Please try again.");

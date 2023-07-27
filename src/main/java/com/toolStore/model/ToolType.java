@@ -2,7 +2,7 @@ package com.toolStore.model;
 
 import java.math.BigDecimal;
 
-public class ToolTypeModel {
+public class ToolType {
     private String toolType;
     private BigDecimal dailyCharge;
     private boolean weekdayCharge;

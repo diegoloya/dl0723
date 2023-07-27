@@ -1,11 +1,12 @@
 package com.toolStore;
 
-import com.toolStore.model.RentalAgreementModel;
+import com.toolStore.model.RentalAgreement;
 
 import java.util.Scanner;
 
 public class ToolStoreApplication {
 
+    //This will orchestrate all actions of the app. User input -> Obtain report -> print report -> repeat
     public static void main(String[] args) {
 
         boolean isRunNewReport = true;
@@ -15,7 +16,7 @@ public class ToolStoreApplication {
             try {
                 scanner.reset();
                 checkout.userInteraction(scanner);
-                RentalAgreementModel report = checkout.getRentalAgreementReport();
+                RentalAgreement report = checkout.getRentalAgreementReport();
                 System.out.println();
                 report.printReport();
                 System.out.println();
